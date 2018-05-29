@@ -1,0 +1,23 @@
+#!/usr/bin/env php
+<?php
+/**
+ * @copyright 2018 Summa
+ * @author Martijn Klene <martijn.klene@voiceworks.com>
+ */
+
+require_once __DIR__ . "/../vendor/autoload.php";
+
+$dotenv = new Dotenv\Dotenv(__DIR__ . '/..');
+$dotenv->load();
+
+$httpClient = new \Mtijn\Domoticz\Ubiquity\HttpClient\GuzzleHttpClient();
+$authenticator = new \Mtijn\Domoticz\Ubiquity\Authenticator($httpClient);
+$cookies = $authenticator->authenticate();
+
+$authenticatedClient = new \Mtijn\Domoticz\Ubiquity\HttpClient\AuthenticatedHttpClient($httpClient, $cookies);
+
+$activeClientService = new \Mtijn\Domoticz\Ubiquity\Service\ActiveClientService($authenticatedClient);
+$client = $activeClientService->getClientByMacAddress(getenv('macaddress'));
+var_dump($client);
+
+$authenticator->logOut($cookies);
