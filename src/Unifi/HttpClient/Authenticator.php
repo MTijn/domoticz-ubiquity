@@ -4,8 +4,10 @@
  * @author Martijn Klene <martijn.klene@voiceworks.com>
  */
 
-namespace Mtijn\Domoticz\Ubiquity;
+namespace Mtijn\Automation\Unifi\HttpClient;
 
+use Mtijn\Automation\HttpClient;
+use Mtijn\Automation\LoginFailedException;
 
 class Authenticator
 {
@@ -21,7 +23,7 @@ class Authenticator
         $this->httpClient = $httpClient;
     }
 
-    public function authenticate() :array
+    public function authenticate() :HttpClient
     {
         try {
             $request = $this->httpClient->request('POST', sprintf('%s/api/login', getenv('unifi.baseUrl')));
@@ -33,8 +35,7 @@ class Authenticator
             if ('ok' !== $contents->meta->rc) {
                 throw new LoginFailedException('Failed to login');
             }
-            $header = $response->getHeader('Set-Cookie');
-            return $header;
+            return new AuthenticatedHttpClient($this->httpClient, $response->getHeader('Set-Cookie'));
         } catch (\Exception $exception) {
             throw new \RuntimeException('Exception caught before starting', $exception->getCode(), $exception->getMessage());
         }

@@ -5,7 +5,7 @@
 //Hostnames/MAC addresses to find
 $hosts = "Tinus daadadads"; //space seperated, can be name, hostname or mac
 
-//Unifi Config
+//UnifiHttpClient Config
 $unifi['user'] = "";
 $unifi['pass'] = "";
 $unifi['port'] = 8443;

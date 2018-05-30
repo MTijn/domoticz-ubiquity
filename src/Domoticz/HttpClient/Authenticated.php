@@ -4,29 +4,26 @@
  * @author Martijn Klene <martijn.klene@voiceworks.com>
  */
 
-namespace Mtijn\Domoticz\Ubiquity\HttpClient;
+namespace Mtijn\Automation\Domoticz\HttpClient;
 
-use Mtijn\Domoticz\Ubiquity\HttpClient;
+use Mtijn\Automation\HttpClient;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 
-class AuthenticatedHttpClient implements HttpClient
+class Authenticated implements HttpClient
 {
     /** @var HttpClient */
     private $httpClient;
-    /** @var array */
-    private $cookies;
 
     /**
-     * AuthenticatedHttpClient constructor.
+     * Authenticated constructor.
      * @param HttpClient $httpClient
-     * @param array $cookies
      */
-    public function __construct(HttpClient $httpClient, array $cookies)
+    public function __construct(HttpClient $httpClient)
     {
         $this->httpClient = $httpClient;
-        $this->cookies = $cookies;
     }
+
 
     public function request(string $method, string $url): RequestInterface
     {
@@ -35,7 +32,14 @@ class AuthenticatedHttpClient implements HttpClient
 
     public function executeRequest(RequestInterface $request): ResponseInterface
     {
-        $request = $request->withAddedHeader('Cookie', $this->cookies[0]);
+        $request = $request->withAddedHeader('Authorization', sprintf(
+            'Basic %s',
+            base64_encode(sprintf(
+                '%s:%s',
+                getenv('domoticz.username'),
+                getenv('domoticz.password')
+            ))
+        ));
         return $this->httpClient->executeRequest($request);
     }
 }

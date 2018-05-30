@@ -6,6 +6,6 @@
 
 namespace Mtijn\Automation\Exception;
 
-class LoginFailedException extends \Exception
+class ClientNotConnectedException extends \Exception
 {
 }

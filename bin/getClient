@@ -10,14 +10,13 @@ require_once __DIR__ . "/../vendor/autoload.php";
 $dotenv = new Dotenv\Dotenv(__DIR__ . '/..');
 $dotenv->load();
 
-$httpClient = new \Mtijn\Domoticz\Ubiquity\HttpClient\GuzzleHttpClient();
-$authenticator = new \Mtijn\Domoticz\Ubiquity\Authenticator($httpClient);
-$cookies = $authenticator->authenticate();
+$httpClient = new Mtijn\Automation\HttpClient\GuzzleHttpClient();
 
-$authenticatedClient = new \Mtijn\Domoticz\Ubiquity\HttpClient\AuthenticatedHttpClient($httpClient, $cookies);
+$authenticator = new \Mtijn\Automation\Unifi\HttpClient\Authenticator($httpClient);
+$authenticatedClient = $authenticator->authenticate();
 
-$activeClientService = new \Mtijn\Domoticz\Ubiquity\Service\ActiveClientService($authenticatedClient);
-$client = $activeClientService->getClientByMacAddress(getenv('macaddress'));
+$activeClientService = new \Mtijn\Automation\Unifi\Service\ActiveClientService($authenticatedClient);
+$client = $activeClientService->getClientByMacAddress(getenv('macAddress'));
 var_dump($client);
 
 $authenticator->logOut($cookies);

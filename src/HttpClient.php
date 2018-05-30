@@ -4,12 +4,10 @@
  * @author Martijn Klene <martijn.klene@voiceworks.com>
  */
 
-namespace Mtijn\Domoticz\Ubiquity;
-
+namespace Mtijn\Automation;
 
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\UriInterface;
 
 interface HttpClient
 {

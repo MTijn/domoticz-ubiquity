@@ -4,12 +4,11 @@
  * @author Martijn Klene <martijn.klene@voiceworks.com>
  */
 
-namespace Mtijn\Domoticz\Ubiquity\HttpClient;
-
+namespace Mtijn\Automation\HttpClient;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Psr7\Request;
-use Mtijn\Domoticz\Ubiquity\HttpClient;
+use Mtijn\Automation\HttpClient;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 
@@ -20,11 +19,9 @@ class GuzzleHttpClient implements HttpClient
         return new Request($method, $url);
     }
 
-    public function executeRequest(RequestInterface $request) : ResponseInterface
+    public function executeRequest(RequestInterface $request): ResponseInterface
     {
-        $client = new Client([
-            'verify' => false
-        ]);
+        $client = new Client();
         return $client->send($request);
     }
 }

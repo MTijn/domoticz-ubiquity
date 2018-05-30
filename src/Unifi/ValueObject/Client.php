@@ -4,7 +4,7 @@
  * @author Martijn Klene <martijn.klene@voiceworks.com>
  */
 
-namespace Mtijn\Domoticz\Ubiquity\ValueObject;
+namespace Mtijn\Automation\Unifi\ValueObject;
 
 class Client
 {

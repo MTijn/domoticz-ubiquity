@@ -1,0 +1,22 @@
+#!/usr/bin/env php
+<?php
+/**
+ * @copyright 2018 Summa
+ * @author Martijn Klene <martijn.klene@voiceworks.com>
+ */
+
+use Mtijn\Automation\Domoticz\HttpClient\Authenticated;
+use Mtijn\Automation\Domoticz\Service\DeviceRetriever;
+use Mtijn\Automation\HttpClient\GuzzleHttpClient;
+
+require_once __DIR__ . "/../vendor/autoload.php";
+
+$dotenv = new Dotenv\Dotenv(__DIR__ . '/..');
+$dotenv->load();
+
+$httpClient = new GuzzleHttpClient();
+$authenticatedClient = new Authenticated($httpClient);
+
+$deviceRetriever = new DeviceRetriever($authenticatedClient);
+$device = $deviceRetriever->retrieveDeviceById(getenv('domoticz.switchId'));
+var_dump($device);

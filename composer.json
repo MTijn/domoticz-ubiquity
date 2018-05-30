@@ -15,7 +15,7 @@
   },
   "autoload": {
     "psr-4": {
-      "Mtijn\\Domoticz\\Ubiquity\\": "src/"
+      "Mtijn\\Automation\\": "src/"
     }
   }
 }
