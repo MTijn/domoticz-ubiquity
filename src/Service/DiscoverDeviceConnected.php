@@ -43,11 +43,19 @@ class DiscoverDeviceConnected
         $device = $this->deviceRetriever->retrieveDeviceById($idx);
         $deviceConnectedInDomoticz = ($device->getData() === 'Off') ? false : true;
         try {
-            $client = $this->activeClientService->getClientByMacAddress(getenv('macAddress'));
+            if (!empty($this->activeClientService->getClientByMacAddress(getenv('macAddress')))) {
+                $request = $this->httpClient->request('GET', sprintf(
+                    '%s/json.htm?type=command&param=switchlight&idx=%d&switchcmd=On',
+                    getenv('domoticz.host'),
+                    $device->getIdx()
+                ));
+                $this->httpClient->executeRequest($request);
+            }
         } catch (ClientNotConnectedException $exception) {
             if (true === $deviceConnectedInDomoticz) {
                 $request = $this->httpClient->request('GET', sprintf(
-                    '%s/json.htm?type=command&param=switchlight&idx=%d&switchcmd=On',
+                    '%s/json.htm?type=command&param=switchlight&idx=%d&switchcmd=Off',
+                    getenv('domoticz.host'),
                     $device->getIdx()
                 ));
                 $this->httpClient->executeRequest($request);

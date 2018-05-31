@@ -21,7 +21,7 @@ class GuzzleHttpClient implements HttpClient
 
     public function executeRequest(RequestInterface $request): ResponseInterface
     {
-        $client = new Client();
+        $client = new Client(['verify' => false]);
         return $client->send($request);
     }
 }
