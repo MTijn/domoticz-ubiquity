@@ -1,13 +1,13 @@
 <?php
 /**
- * @copyright 2018 Summa
- * @author Martijn Klene <martijn.klene@voiceworks.com>
+ * @copyright 2018 Martijn Klene
+ * @author Martijn Klene
  */
 
 namespace Mtijn\Automation\Unifi\HttpClient;
 
+use Mtijn\Automation\Exception\LoginFailedException;
 use Mtijn\Automation\HttpClient;
-use Mtijn\Automation\LoginFailedException;
 
 class Authenticator
 {
@@ -37,7 +37,7 @@ class Authenticator
             }
             return new AuthenticatedHttpClient($this->httpClient, $response->getHeader('Set-Cookie'));
         } catch (\Exception $exception) {
-            throw new \RuntimeException('Exception caught before starting', $exception->getCode(), $exception->getMessage());
+            throw new \RuntimeException('Exception caught before starting');
         }
     }
 

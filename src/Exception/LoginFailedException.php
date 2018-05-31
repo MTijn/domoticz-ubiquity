@@ -1,7 +1,7 @@
 <?php
 /**
- * @copyright 2018 Summa
- * @author Martijn Klene <martijn.klene@voiceworks.com>
+ * @copyright 2018 Martijn Klene
+ * @author Martijn Klene
  */
 
 namespace Mtijn\Automation\Exception;
