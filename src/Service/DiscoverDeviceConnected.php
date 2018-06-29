@@ -37,8 +37,10 @@ class DiscoverDeviceConnected
         $this->httpClient = $httpClient;
     }
 
-
-    public function mark(string $idx) :void
+    /**
+     * @param string $idx
+     */
+    public function mark(string $idx)
     {
         $device = $this->deviceRetriever->retrieveDeviceById($idx);
         $deviceConnectedInDomoticz = ($device->getData() === 'Off') ? false : true;
