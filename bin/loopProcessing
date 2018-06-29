@@ -13,17 +13,18 @@ $dotenv->load();
 $consoleOutput = new \Symfony\Component\Console\Output\ConsoleOutput();
 
 $httpClient = new GuzzleHttpClient();
-$authenticatedDomoticzClient = new Authenticated($httpClient);
-$authenticator = new \Mtijn\Automation\Unifi\HttpClient\Authenticator($httpClient);
-$authenticatedUnifiClient = $authenticator->authenticate();
-
-$deviceRetriever = new DeviceRetriever($authenticatedDomoticzClient);
-$clientRetriever = new Mtijn\Automation\Unifi\Service\ActiveClientService($authenticatedUnifiClient);
-
-$connectedDeviceDiscoverer = new \Mtijn\Automation\Service\DiscoverDeviceConnected($clientRetriever, $deviceRetriever, $authenticatedDomoticzClient);
 $loop = \React\EventLoop\Factory::create();
 
-$loop->addPeriodicTimer(360, function() use ($connectedDeviceDiscoverer, $consoleOutput) {
+$loop->addPeriodicTimer(360, function() use ($httpClient, $consoleOutput) {
+    $authenticatedDomoticzClient = new Authenticated($httpClient);
+    $authenticator = new \Mtijn\Automation\Unifi\HttpClient\Authenticator($httpClient);
+    $authenticatedUnifiClient = $authenticator->authenticate();
+
+    $deviceRetriever = new DeviceRetriever($authenticatedDomoticzClient);
+    $clientRetriever = new Mtijn\Automation\Unifi\Service\ActiveClientService($authenticatedUnifiClient);
+
+    $connectedDeviceDiscoverer = new \Mtijn\Automation\Service\DiscoverDeviceConnected($clientRetriever, $deviceRetriever, $authenticatedDomoticzClient);
+
     $consoleOutput->writeln('Checking if device is connected');
     $connectedDeviceDiscoverer->mark(getenv('domoticz.switchId'));
 });
