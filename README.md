@@ -1,4 +1,4 @@
-#Ubiquity Wi-Fi presence detection for Domoticz
+# Ubiquity Wi-Fi presence detection for Domoticz
 
 Enables the user to check if a wireless device is connected to network.
 
