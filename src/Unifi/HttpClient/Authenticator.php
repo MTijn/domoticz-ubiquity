@@ -37,7 +37,7 @@ class Authenticator
             }
             return new AuthenticatedHttpClient($this->httpClient, $response->getHeader('Set-Cookie'));
         } catch (\Exception $exception) {
-            throw new \RuntimeException('Exception caught before starting');
+            throw new \RuntimeException('Exception caught before starting', null, $exception);
         }
     }
 
