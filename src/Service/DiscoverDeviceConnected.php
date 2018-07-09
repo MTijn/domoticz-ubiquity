@@ -11,6 +11,7 @@ use Mtijn\Automation\Domoticz\Service\DeviceRetriever;
 use Mtijn\Automation\Exception\ClientNotConnectedException;
 use Mtijn\Automation\HttpClient;
 use Mtijn\Automation\Unifi\Service\ActiveClientService;
+use Symfony\Component\Console\Output\OutputInterface;
 
 class DiscoverDeviceConnected
 {
@@ -20,6 +21,8 @@ class DiscoverDeviceConnected
     private $deviceRetriever;
     /** @var HttpClient */
     private $httpClient;
+    /** @var OutputInterface */
+    private $output;
 
     /**
      * DiscoverDeviceConnected constructor.
@@ -30,11 +33,13 @@ class DiscoverDeviceConnected
     public function __construct(
         ActiveClientService $activeClientService,
         DeviceRetriever $deviceRetriever,
-        Authenticated $httpClient
+        Authenticated $httpClient,
+        OutputInterface $output
     ) {
         $this->activeClientService = $activeClientService;
         $this->deviceRetriever = $deviceRetriever;
         $this->httpClient = $httpClient;
+        $this->output = $output;
     }
 
     /**
@@ -46,6 +51,7 @@ class DiscoverDeviceConnected
         $deviceConnectedInDomoticz = ($device->getData() === 'Off') ? false : true;
         try {
             if (!empty($this->activeClientService->getClientByMacAddress(getenv('macAddress')))) {
+                $this->output->writeln('Device is connnecting, switching it on');
                 $request = $this->httpClient->request('GET', sprintf(
                     '%s/json.htm?type=command&param=switchlight&idx=%d&switchcmd=On',
                     getenv('domoticz.host'),
@@ -55,6 +61,7 @@ class DiscoverDeviceConnected
             }
         } catch (ClientNotConnectedException $exception) {
             if (true === $deviceConnectedInDomoticz) {
+                $this->output->writeln('Device is not connected any more, switching it off');
                 $request = $this->httpClient->request('GET', sprintf(
                     '%s/json.htm?type=command&param=switchlight&idx=%d&switchcmd=Off',
                     getenv('domoticz.host'),

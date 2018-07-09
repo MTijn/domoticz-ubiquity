@@ -22,5 +22,10 @@ $authenticatedUnifiClient = $authenticator->authenticate();
 $deviceRetriever = new DeviceRetriever($authenticatedDomoticzClient);
 $clientRetriever = new Mtijn\Automation\Unifi\Service\ActiveClientService($authenticatedUnifiClient);
 
-$connectedDeviceDiscoverer = new \Mtijn\Automation\Service\DiscoverDeviceConnected($clientRetriever, $deviceRetriever, $authenticatedDomoticzClient);
+$connectedDeviceDiscoverer = new \Mtijn\Automation\Service\DiscoverDeviceConnected(
+        $clientRetriever,
+        $deviceRetriever,
+        $authenticatedDomoticzClient,
+        new \Symfony\Component\Console\Output\ConsoleOutput()
+    );
 $connectedDeviceDiscoverer->mark(getenv('domoticz.switchId'));
