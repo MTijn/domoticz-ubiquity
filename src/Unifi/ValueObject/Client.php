@@ -546,7 +546,7 @@ class Client
             $json->first_seen,
             $json->hostname,
             $json->idletime,
-            $json->ip,
+            (string)$json->ip,
             $json->is_11r,
             $json->is_guest,
             $json->is_wired,
