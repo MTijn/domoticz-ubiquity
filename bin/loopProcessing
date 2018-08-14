@@ -16,23 +16,27 @@ $httpClient = new GuzzleHttpClient();
 $loop = \React\EventLoop\Factory::create();
 
 $loop->addPeriodicTimer(360, function() use ($httpClient, $consoleOutput) {
-    $authenticatedDomoticzClient = new Authenticated($httpClient);
-    $authenticator = new \Mtijn\Automation\Unifi\HttpClient\Authenticator($httpClient);
-    $authenticatedUnifiClient = $authenticator->authenticate();
+    try {
+        $authenticatedDomoticzClient = new Authenticated($httpClient);
+        $authenticator = new \Mtijn\Automation\Unifi\HttpClient\Authenticator($httpClient);
+        $authenticatedUnifiClient = $authenticator->authenticate();
 
-    $deviceRetriever = new DeviceRetriever($authenticatedDomoticzClient);
-    $clientRetriever = new Mtijn\Automation\Unifi\Service\ActiveClientService($authenticatedUnifiClient);
+        $deviceRetriever = new DeviceRetriever($authenticatedDomoticzClient);
+        $clientRetriever = new Mtijn\Automation\Unifi\Service\ActiveClientService($authenticatedUnifiClient);
 
-    $connectedDeviceDiscoverer = new \Mtijn\Automation\Service\DiscoverDeviceConnected(
+        $connectedDeviceDiscoverer = new \Mtijn\Automation\Service\DiscoverDeviceConnected(
             $clientRetriever,
             $deviceRetriever,
             $authenticatedDomoticzClient,
             $consoleOutput
-    );
+        );
 
-    $consoleOutput->writeln('Checking if device is connected');
-    $connectedDeviceDiscoverer->mark(getenv('domoticz.switchId'));
-    $consoleOutput->writeln('-----------------');
+        $consoleOutput->writeln('Checking if device is connected');
+        $connectedDeviceDiscoverer->mark(getenv('domoticz.switchId'));
+        $consoleOutput->writeln('-----------------');
+    } catch (Exception $e) {
+        $consoleOutput->writeln('<error>Request failed to proceed</error>' . $e->getMessage());
+    }
 });
 
 $loop->run();
