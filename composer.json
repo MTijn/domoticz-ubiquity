@@ -10,7 +10,7 @@
     }
   ],
   "require": {
-    "php": ">=7.0.27",
+    "php": ">=7.3",
     "guzzlehttp/guzzle": "^6.3",
     "vlucas/phpdotenv": "^2.4",
     "react/react": "^0.4",

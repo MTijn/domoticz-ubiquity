@@ -1,0 +1,12 @@
+version: '3.6'
+services:
+  server:
+    image: mtijn/ubiquity-presence:0.0.1
+    secrets:
+      - source: unifi-env
+        target: /app/.env
+        mode: 0400
+
+secrets:
+  unifi-env:
+    external: true
