@@ -51,6 +51,10 @@ class DiscoverDeviceConnected
         $deviceConnectedInDomoticz = ($device->getData() === 'Off') ? false : true;
         try {
             if (!empty($this->activeClientService->getClientByMacAddress(getenv('macAddress')))) {
+                if ($deviceConnectedInDomoticz === true) {
+                    $this->output->writeln('Device is already switched on, leave it as is');
+                    return;
+                }
                 $this->output->writeln('Device is connnected, switching it on');
                 $request = $this->httpClient->request('GET', sprintf(
                     '%s/json.htm?type=command&param=switchlight&idx=%d&switchcmd=On',
