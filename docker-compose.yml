@@ -1,7 +1,7 @@
 version: '3.6'
 services:
   server:
-    image: mtijn/ubiquity-presence:0.0.1
+    image: mtijnnl/domoticz-ubiquity:1.3.0
     secrets:
       - source: unifi-env
         target: /app/.env
