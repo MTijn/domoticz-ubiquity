@@ -1,8 +1,4 @@
 <?php
-/**
- * @copyright 2018 Martijn Klene
- * @author Martijn Klene
- */
 
 namespace Mtijn\Automation\Domoticz\Service;
 
@@ -12,16 +8,8 @@ use Mtijn\Automation\HttpClient;
 
 class DeviceRetriever
 {
-    /** @var HttpClient */
-    private $httpClient;
-
-    /**
-     * DeviceRetriever constructor.
-     * @param HttpClient $httpClient
-     */
-    public function __construct(HttpClient $httpClient)
+    public function __construct(private HttpClient $httpClient)
     {
-        $this->httpClient = $httpClient;
     }
 
     public function retrieveDeviceById(string $idx) :SwitchDevice

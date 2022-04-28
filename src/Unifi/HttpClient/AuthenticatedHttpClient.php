@@ -1,8 +1,4 @@
 <?php
-/**
- * @copyright 2018 Martijn Klene
- * @author Martijn Klene
- */
 
 namespace Mtijn\Automation\Unifi\HttpClient;
 
@@ -12,20 +8,10 @@ use Psr\Http\Message\ResponseInterface;
 
 class AuthenticatedHttpClient implements HttpClient
 {
-    /** @var HttpClient */
-    private $httpClient;
-    /** @var array */
-    private $cookies;
-
-    /**
-     * AuthenticatedHttpClient constructor.
-     * @param HttpClient $httpClient
-     * @param array $cookies
-     */
-    public function __construct(HttpClient $httpClient, array $cookies)
-    {
-        $this->httpClient = $httpClient;
-        $this->cookies = $cookies;
+    public function __construct(
+        private HttpClient $httpClient,
+        private array $cookies
+    ) {
     }
 
     public function request(string $method, string $url): RequestInterface

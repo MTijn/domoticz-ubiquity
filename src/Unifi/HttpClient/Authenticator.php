@@ -11,16 +11,8 @@ use Mtijn\Automation\HttpClient;
 
 class Authenticator
 {
-    /** @var HttpClient */
-    private $httpClient;
-
-    /**
-     * Authenticator constructor.
-     * @param HttpClient $httpClient
-     */
-    public function __construct(HttpClient $httpClient)
+    public function __construct(private HttpClient $httpClient)
     {
-        $this->httpClient = $httpClient;
     }
 
     public function authenticate() :HttpClient
@@ -41,10 +33,10 @@ class Authenticator
         }
     }
 
-    public function logOut(array $cookies)
+    public function logOut(array $cookies): void
     {
         $request = $this->httpClient->request('GET', sprintf('%s/api/logout', getenv('unifi.baseUrl')))
         ->withAddedHeader('Cookie', $cookies[0]);
-        $response = $this->httpClient->executeRequest($request);
+        $this->httpClient->executeRequest($request);
     }
 }

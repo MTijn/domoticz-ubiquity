@@ -1,8 +1,4 @@
 <?php
-/**
- * @copyright 2018 Martijn Klene
- * @author Martijn Klene
- */
 
 namespace Mtijn\Automation\Domoticz\HttpClient;
 
@@ -12,16 +8,8 @@ use Psr\Http\Message\ResponseInterface;
 
 class Authenticated implements HttpClient
 {
-    /** @var HttpClient */
-    private $httpClient;
-
-    /**
-     * Authenticated constructor.
-     * @param HttpClient $httpClient
-     */
-    public function __construct(HttpClient $httpClient)
+    public function __construct(private HttpClient $httpClient)
     {
-        $this->httpClient = $httpClient;
     }
 
 

@@ -1,4 +1,4 @@
-FROM php:7.4-alpine AS deps
+FROM php:8.1-alpine AS deps
 
 # install composer
 RUN apk update \
@@ -18,7 +18,7 @@ WORKDIR /app
 RUN composer.phar install --no-dev --classmap-authoritative
 
 # this is the REAL application container now
-FROM php:7.4-alpine
+FROM php:8.1-alpine
 
 # we don't need to do anything here by copy the `/app` folder from the
 # `deps` stage above. Its /app folder will have all the vendor files etc

@@ -1,8 +1,4 @@
 <?php
-/**
- * @copyright 2018 Martijn Klene
- * @author Martijn Klene
- */
 
 namespace Mtijn\Automation\Service;
 
@@ -15,37 +11,15 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class DiscoverDeviceConnected
 {
-    /** @var ActiveClientService */
-    private $activeClientService;
-    /** @var DeviceRetriever */
-    private $deviceRetriever;
-    /** @var HttpClient */
-    private $httpClient;
-    /** @var OutputInterface */
-    private $output;
-
-    /**
-     * DiscoverDeviceConnected constructor.
-     * @param ActiveClientService $activeClientService
-     * @param DeviceRetriever $deviceRetriever
-     * @param HttpClient $httpClient
-     */
     public function __construct(
-        ActiveClientService $activeClientService,
-        DeviceRetriever $deviceRetriever,
-        Authenticated $httpClient,
-        OutputInterface $output
+        private ActiveClientService $activeClientService,
+        private DeviceRetriever $deviceRetriever,
+        private Authenticated $httpClient,
+        private OutputInterface $output
     ) {
-        $this->activeClientService = $activeClientService;
-        $this->deviceRetriever = $deviceRetriever;
-        $this->httpClient = $httpClient;
-        $this->output = $output;
     }
 
-    /**
-     * @param string $idx
-     */
-    public function mark(string $idx)
+    public function mark(string $idx): void
     {
         $device = $this->deviceRetriever->retrieveDeviceById($idx);
         $deviceConnectedInDomoticz = ($device->getData() === 'Off') ? false : true;
@@ -63,7 +37,7 @@ class DiscoverDeviceConnected
                 ));
                 $this->httpClient->executeRequest($request);
             }
-        } catch (ClientNotConnectedException $exception) {
+        } catch (ClientNotConnectedException) {
             if (true === $deviceConnectedInDomoticz) {
                 $this->output->writeln('Device is not connected any more, switching it off');
                 $request = $this->httpClient->request('GET', sprintf(

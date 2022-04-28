@@ -1,8 +1,4 @@
 <?php
-/**
- * @copyright 2018 Martijn Klene
- * @author Martijn Klene
- */
 
 namespace Mtijn\Automation\Unifi\Service;
 
@@ -13,12 +9,8 @@ use Mtijn\Automation\Unifi\ValueObject\Client;
 
 class ActiveClientService
 {
-    /** @var HttpClient */
-    private $httpClient;
-
-    public function __construct(HttpClient $httpClient)
+    public function __construct(private HttpClient $httpClient)
     {
-        $this->httpClient = $httpClient;
     }
 
     /**
