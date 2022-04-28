@@ -24,19 +24,18 @@ class DiscoverDeviceConnected
         $device = $this->deviceRetriever->retrieveDeviceById($idx);
         $deviceConnectedInDomoticz = ($device->getData() === 'Off') ? false : true;
         try {
-            if (!empty($this->activeClientService->getClientByMacAddress(getenv('macAddress')))) {
-                if ($deviceConnectedInDomoticz === true) {
-                    $this->output->writeln('Device is already switched on, leave it as is');
-                    return;
-                }
-                $this->output->writeln('Device is connnected, switching it on');
-                $request = $this->httpClient->request('GET', sprintf(
-                    '%s/json.htm?type=command&param=switchlight&idx=%d&switchcmd=On',
-                    getenv('domoticz.host'),
-                    $device->getIdx()
-                ));
-                $this->httpClient->executeRequest($request);
+            $this->activeClientService->getClientByMacAddress(getenv('macAddress'));
+            if ($deviceConnectedInDomoticz === true) {
+                $this->output->writeln('Device is already switched on, leave it as is');
+                return;
             }
+            $this->output->writeln('Device is connnected, switching it on');
+            $request = $this->httpClient->request('GET', sprintf(
+                '%s/json.htm?type=command&param=switchlight&idx=%d&switchcmd=On',
+                getenv('domoticz.host'),
+                $device->getIdx()
+            ));
+            $this->httpClient->executeRequest($request);
         } catch (ClientNotConnectedException) {
             if (true === $deviceConnectedInDomoticz) {
                 $this->output->writeln('Device is not connected any more, switching it off');
