@@ -19,9 +19,11 @@ class Authenticator
     {
         try {
             $request = $this->httpClient->request('POST', sprintf('%s/api/login', getenv('unifi.baseUrl')));
-            $request->getBody()->write(json_encode(
-                ['username' => getenv('unifi.username'), 'password' => getenv('unifi.password'), 'strict' => true]
-            ));
+            $requestContent = json_encode(['username' => getenv('unifi.username'), 'password' => getenv('unifi.password'), 'strict' => true]);
+            if ($requestContent === false) {
+                throw new \RuntimeException('Encoding failed');
+            }
+            $request->getBody()->write($requestContent);
             $response = $this->httpClient->executeRequest($request);
             $contents = json_decode($response->getBody()->getContents());
             if ('ok' !== $contents->meta->rc) {

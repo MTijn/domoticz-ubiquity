@@ -13,11 +13,6 @@ class ActiveClientService
     {
     }
 
-    /**
-     * @param string $macAddress
-     * @return Client
-     * @throws ClientNotConnectedException
-     */
     public function getClientByMacAddress(string $macAddress): Client
     {
         try {
@@ -30,7 +25,7 @@ class ActiveClientService
             $response = $this->httpClient->executeRequest($request);
             $content = json_decode($response->getBody()->getContents());
             return Client::createFromJson($content->data[0]);
-        } catch (ClientException $exception) {
+        } catch (ClientException) {
             throw new ClientNotConnectedException('Client is not connected');
         }
     }
