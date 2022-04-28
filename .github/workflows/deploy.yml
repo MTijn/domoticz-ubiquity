@@ -1,0 +1,46 @@
+name: CI Testing
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Validate composer.json and composer.lock
+        run: composer validate --strict
+
+      - name: Cache Composer packages
+        id: composer-cache
+        uses: actions/cache@v3
+        with:
+          path: vendor
+          key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-php-
+
+      - name: Install dependencies
+        run: composer install --no-dev --prefer-dist --no-progress
+
+      - name: Running static analysis
+        run: vendor/bin/phpstan analyse -l 4 src
+
+      - name: Run test suite
+        run: vendor/bin/phpunit
+
+      - name: Build and Push Docker Image
+        uses: docker/build-push-action@v1
+        with:
+          path: .
+          dockerfile: ./Dockerfile
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+          repository: mtijnnl/domoticz-ubiquity
+          tags: ${{steps.tag.outputs.tag}}
+
+
